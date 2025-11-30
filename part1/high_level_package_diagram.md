@@ -7,12 +7,12 @@ The HBnB Evolution application follows a structured **three-layer architecture**
 
 ```mermaid
 classDiagram
-    classPresentationLayer {
+    class PresentationLayer {
         <<Interface>>
         +ServiceAPI
     }
 
-    classBusinessLogicLayer {
+    class BusinessLogicLayer {
         +HBnBFacade
         +User
         +Place
@@ -20,10 +20,10 @@ classDiagram
         +Amenity
     }
 
-    classPersistenceLayer {
+    class PersistenceLayer {
         +DataRepository
     }
 
     %% Relationships
-    classPresentationLayer --> classBusinessLogicLayer : Uses (Facade Interface)
-    classBusinessLogicLayer --> classPersistenceLayer : Database Operations
+    PresentationLayer --> BusinessLogicLayer : Uses (Facade Interface)
+    BusinessLogicLayer --> PersistenceLayer : Database Operations
