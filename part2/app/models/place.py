@@ -1,6 +1,7 @@
 from app.models.base_model import BaseModel
 from app.models.user import User
 
+
 class Place(BaseModel):
     def __init__(self, title, description, price, latitude, longitude, owner):
         super().__init__()
@@ -11,7 +12,7 @@ class Place(BaseModel):
         self.longitude = longitude
         self.owner = owner
         self.reviews = []  # Relationship: Rəylər siyahısı
-        self.amenities = [] # Relationship: Rahatlıqlar siyahısı
+        self.amenities = []  # Relationship: Rahatlıqlar siyahısı
 
         # Validasiyalar
         if not title or len(title) > 100:

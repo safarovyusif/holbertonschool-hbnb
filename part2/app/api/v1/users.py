@@ -5,11 +5,12 @@ api = Namespace('users', description='User operations')
 
 # Define the user model for input validation and documentation
 user_model = api.model('User', {
-    'first_name': fields.String(required=True, description='First name of the user'),
-    'last_name': fields.String(required=True, description='Last name of the user'),
+    'first_name': fields.String(required=True, description='First name'),
+    'last_name': fields.String(required=True, description='Last name'),
     'email': fields.String(required=True, description='Email of the user'),
     'is_admin': fields.Boolean(description='Admin status', default=False)
 })
+
 
 @api.route('/')
 class UserList(Resource):
@@ -48,6 +49,7 @@ class UserList(Resource):
             'last_name': user.last_name,
             'email': user.email
         } for user in users], 200
+
 
 @api.route('/<user_id>')
 class UserResource(Resource):
