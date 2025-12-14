@@ -4,7 +4,11 @@ print("--- TEST BAŞLADI ---")
 
 # 1. Yeni istifadəçi yaradırıq (parol: 'gizli123')
 try:
-    user = User(first_name="Ali", last_name="Aliyev", email="ali@mail.com", password="gizli123")
+    user = User(
+        first_name="Ali",
+        last_name="Aliyev",
+        email="ali@mail.com",
+        password="gizli123")
     print("✅ User obyekti yaradıldı.")
 except Exception as e:
     print(f"❌ XƏTA: User yaradılarkən problem oldu: {e}")
@@ -15,7 +19,9 @@ except Exception as e:
 if user.password != "gizli123" and user.password.startswith("$2b$"):
     print(f"✅ UĞURLU: Parol şifrələnib (Hash): {user.password}")
 else:
-    print(f"❌ XƏTA: Parol açıq şəkildə qalıb və ya şifrələnməyib: {user.password}")
+    print(
+        f"❌ XƏTA: Parol açıq şəkildə qalıb və ya şifrələn \n   \n      \
+    məyib: {user.password}")
 
 # 3. verify_password funksiyasını yoxlayırıq
 if user.verify_password("gizli123"):

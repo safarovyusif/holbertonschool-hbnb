@@ -19,7 +19,7 @@ VALUES (
     1
 );
 
-INSERT INTO amenities (id, name) VALUES 
+INSERT INTO amenities (id, name) VALUES
     ('{str(uuid.uuid4())}', 'WiFi'),
     ('{str(uuid.uuid4())}', 'Swimming Pool'),
     ('{str(uuid.uuid4())}', 'Air Conditioning');
