@@ -2,80 +2,76 @@ from app.models.user import User
 from app.models.place import Place
 from app.models.review import Review
 from app.models.amenity import Amenity
+from app.repositories.user_repository import UserRepository
+from app.persistence.repository import InMemoryRepository
 
 class HBnBFacade:
     def __init__(self):
-        self.user_repo = []
-        self.place_repo = []
-        self.review_repo = []
-        self.amenity_repo = []
+        self.user_repo = UserRepository()  # Xüsusi User Repository
+        self.place_repo = InMemoryRepository()
+        self.review_repo = InMemoryRepository()
+        self.amenity_repo = InMemoryRepository()
 
-    # --- User Logic ---
+    # --- User Operations ---
     def create_user(self, user_data):
         user = User(**user_data)
-        self.user_repo.append(user)
+        user.hash_password(user_data['password'])
+        self.user_repo.add(user)
         return user
 
     def get_user(self, user_id):
-        return next((u for u in self.user_repo if u.id == user_id), None)
+        return self.user_repo.get(user_id)
 
     def get_user_by_email(self, email):
-        return next((u for u in self.user_repo if u.email == email), None)
+        return self.user_repo.get_user_by_email(email)
 
-    # --- Place Logic ---
+    # --- Place Operations ---
     def create_place(self, place_data):
         place = Place(**place_data)
-        self.place_repo.append(place)
+        self.place_repo.add(place)
         return place
 
     def get_place(self, place_id):
-        return next((p for p in self.place_repo if p.id == place_id), None)
+        return self.place_repo.get(place_id)
 
     def get_all_places(self):
-        return self.place_repo
+        return self.place_repo.get_all()
 
-    def update_place(self, place_id, data):
-        place = self.get_place(place_id)
-        if place:
-            place.update(data)
-        return place
+    def update_place(self, place_id, place_data):
+        self.place_repo.update(place_id, place_data)
+        return self.get_place(place_id)
 
-    # --- Review Logic ---
+    # --- Review Operations ---
     def create_review(self, review_data):
         review = Review(**review_data)
-        self.review_repo.append(review)
+        self.review_repo.add(review)
         return review
 
     def get_review(self, review_id):
-        return next((r for r in self.review_repo if r.id == review_id), None)
+        return self.review_repo.get(review_id)
 
     def get_all_reviews(self):
-        return self.review_repo
+        return self.review_repo.get_all()
 
-    def get_reviews_by_place(self, place_id):
-        return [r for r in self.review_repo if r.place_id == place_id]
-
-    def update_review(self, review_id, data):
-        review = self.get_review(review_id)
-        if review:
-            review.update(data)
-        return review
+    def update_review(self, review_id, review_data):
+        self.review_repo.update(review_id, review_data)
+        return self.get_review(review_id)
 
     def delete_review(self, review_id):
-        review = self.get_review(review_id)
-        if review:
-            self.review_repo.remove(review)
-            return True
-        return False
+        self.review_repo.delete(review_id)
 
-    # --- Amenity Logic ---
+    # --- Amenity Operations ---
     def create_amenity(self, amenity_data):
         amenity = Amenity(**amenity_data)
-        self.amenity_repo.append(amenity)
+        self.amenity_repo.add(amenity)
         return amenity
 
     def get_amenity(self, amenity_id):
-        return next((a for a in self.amenity_repo if a.id == amenity_id), None)
+        return self.amenity_repo.get(amenity_id)
 
     def get_all_amenities(self):
-        return self.amenity_repo
+        return self.amenity_repo.get_all()
+
+    def update_amenity(self, amenity_id, amenity_data):
+        self.amenity_repo.update(amenity_id, amenity_data)
+        return self.get_amenity(amenity_id)
