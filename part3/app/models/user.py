@@ -10,10 +10,14 @@ class User(BaseModel):
     password = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
+    # İstifadəçinin evləri
+    places = db.relationship('Place', backref='owner', lazy=True)
+
+    # İstifadəçinin rəyləri
+    reviews = db.relationship('Review', backref='author', lazy=True)
+
     def hash_password(self, password):
-        """Parolu hashlayır"""
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def verify_password(self, password):
-        """Parolu yoxlayır"""
         return bcrypt.check_password_hash(self.password, password)

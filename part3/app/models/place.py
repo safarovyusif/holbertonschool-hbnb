@@ -1,19 +1,27 @@
+from app import db
 from app.models.base_model import BaseModel
 
+# Many-to-Many üçün ara cədvəl
+place_amenity = db.Table('place_amenity',
+    db.Column('place_id', db.String(36), db.ForeignKey('places.id'), primary_key=True),
+    db.Column('amenity_id', db.String(36), db.ForeignKey('amenities.id'), primary_key=True)
+)
+
 class Place(BaseModel):
-    def __init__(self, title, description, price, latitude, longitude, owner_id):
-        super().__init__()
-        self.title = title
-        self.description = description
-        self.price = price
-        self.latitude = latitude
-        self.longitude = longitude
-        self.owner_id = owner_id
-        self.reviews = []  # Evə aid rəylər
-        self.amenities = []  # Evə aid şəraitlər (wifi, hovuz və s.)
+    __tablename__ = 'places'
 
-    def add_review(self, review):
-        self.reviews.append(review)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(255), nullable=True)
+    price = db.Column(db.Float, nullable=False)
+    latitude = db.Column(db.Float, nullable=True)
+    longitude = db.Column(db.Float, nullable=True)
 
-    def add_amenity(self, amenity):
-        self.amenities.append(amenity)
+    # User ilə əlaqə (Foreign Key)
+    owner_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
+
+    # Review ilə əlaqə (Bir evin çoxlu rəyi ola bilər)
+    # cascade="all, delete-orphan" -> Ev silinərsə, rəyləri də silinsin
+    reviews = db.relationship('Review', backref='place', lazy=True, cascade="all, delete-orphan")
+
+    # Amenity ilə əlaqə (Many-to-Many)
+    amenities = db.relationship('Amenity', secondary=place_amenity, backref='places', lazy='subquery')

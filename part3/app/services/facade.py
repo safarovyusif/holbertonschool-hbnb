@@ -3,14 +3,16 @@ from app.models.place import Place
 from app.models.review import Review
 from app.models.amenity import Amenity
 from app.repositories.user_repository import UserRepository
-from app.persistence.repository import InMemoryRepository
+from app.repositories.place_repository import PlaceRepository
+from app.repositories.review_repository import ReviewRepository
+from app.repositories.amenity_repository import AmenityRepository
 
 class HBnBFacade:
     def __init__(self):
-        self.user_repo = UserRepository()  # Xüsusi User Repository
-        self.place_repo = InMemoryRepository()
-        self.review_repo = InMemoryRepository()
-        self.amenity_repo = InMemoryRepository()
+        self.user_repo = UserRepository()
+        self.place_repo = PlaceRepository()
+        self.review_repo = ReviewRepository()
+        self.amenity_repo = AmenityRepository()
 
     # --- User Operations ---
     def create_user(self, user_data):
@@ -34,7 +36,7 @@ class HBnBFacade:
     def get_place(self, place_id):
         return self.place_repo.get(place_id)
 
-    def get_all_places(self):
+    def get_all_places(self):  # <--- Bura çatışmırdı
         return self.place_repo.get_all()
 
     def update_place(self, place_id, place_data):
