@@ -15,7 +15,7 @@ This project is built to manage the following entities:
 
 The following Entity Relationship Diagram (ERD) illustrates the schema and relationships between the data models:
 
-![Database Schema](assets/database_diagram.png)
+![Database Schema](part3/images/mermaid-diagram-2025-12-14-082756.png)
 
 ### Models Breakdown
 * **User:** The root of the relationship, owning places and writing reviews.
