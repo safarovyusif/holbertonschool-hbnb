@@ -45,7 +45,7 @@ footer {
     margin-top: 50px;
 }
 
-/* CARDS (Fixed Parameters) */
+/* CARDS (Fixed Parameters: Margin 20px, etc.) */
 .place-card, .review-card {
     margin: 20px;
     padding: 10px;
@@ -57,7 +57,7 @@ footer {
 .place-card {
     width: 300px;
     box-sizing: border-box;
-    display: inline-block; /* Or flex item behavior */
+    display: inline-block;
 }
 #places-list {
     display: flex;
@@ -98,8 +98,12 @@ footer {
     margin: 50px auto;
     padding: 30px;
     border: 1px solid #ddd;
-    border-radius: 10px;
+    border-radius: 10px; /* Tələb olunan radius */
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.login-card h2, .review-form-card h2 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 .form-group { margin-bottom: 15px; }
 .form-group label {
