@@ -4,19 +4,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginLink = document.getElementById('login-link');
     const addReviewSection = document.getElementById('add-review-section');
 
-    // 1. Login Linkini İdarə et (Görünüb/Gizlənməsi)
+    // 1. Login Linkini İdarə et
     if (loginLink) {
         if (token) {
-            loginLink.style.display = 'none'; // Giriş edibsə gizlət
+            loginLink.style.display = 'none';
         } else {
             loginLink.style.display = 'block';
         }
     }
 
-    // 2. Add Review Düyməsini İdarə et (Place səhifəsi üçün)
+    // 2. Add Review Düyməsini İdarə et (Place səhifəsində)
     if (addReviewSection) {
         if (token) {
-            addReviewSection.style.display = 'block'; // Giriş edibsə göstər
+            addReviewSection.style.display = 'block';
         } else {
             addReviewSection.style.display = 'none';
         }
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // B. INDEX SƏHİFƏSİ (Evlərin Siyahısı)
+    // B. INDEX SƏHİFƏSİ
     const placesList = document.getElementById('places-list');
     const priceFilter = document.getElementById('price-filter');
     
@@ -76,18 +76,64 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // C. PLACE DETAILS SƏHİFƏSİ (Təkdə evin detalları) - TASK 4 BURADADIR
+    // C. PLACE DETAILS SƏHİFƏSİ
     const placeNameElement = document.getElementById('place-name');
     if (placeNameElement) {
-        // URL-dən ID-ni götürürük
         const urlParams = new URLSearchParams(window.location.search);
         const placeId = urlParams.get('id');
 
         if (placeId) {
+            // "Add Review" düyməsinin linkini yeniləyirik ki, ID-ni ötürsün
+            const addReviewBtn = document.querySelector('#add-review-section a');
+            if (addReviewBtn) {
+                addReviewBtn.href = `add_review.html?id=${placeId}`;
+            }
             fetchPlaceDetails(token, placeId);
         } else {
-            window.location.href = 'index.html'; // ID yoxdursa ana səhifəyə at
+            window.location.href = 'index.html';
         }
+    }
+
+    // D. ADD REVIEW SƏHİFƏSİ (TASK 5 BURADADIR)
+    const reviewForm = document.getElementById('review-form');
+    if (reviewForm) {
+        // Təhlükəsizlik: Token yoxdursa, ana səhifəyə at
+        if (!token) {
+            window.location.href = 'index.html';
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const placeId = urlParams.get('id');
+
+        if (!placeId) {
+            window.location.href = 'index.html'; // ID yoxdursa işləməz
+        }
+
+        reviewForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const text = document.getElementById('review-text').value;
+
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/api/v1/places/${placeId}/reviews`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ text: text }) // API adətən "text" açarı gözləyir
+                });
+
+                if (response.ok) {
+                    alert('Review added successfully!');
+                    window.location.href = `place.html?id=${placeId}`; // Geri qayıt
+                } else {
+                    alert('Failed to add review.');
+                }
+            } catch (error) {
+                console.error('Error adding review:', error);
+                alert('Network error.');
+            }
+        });
     }
 
     // --- KÖMƏKÇİ FUNKSİYALAR ---
@@ -126,7 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Task 4 üçün xüsusi funksiya
     async function fetchPlaceDetails(token, placeId) {
         try {
             const response = await fetch(`http://127.0.0.1:5000/api/v1/places/${placeId}`, {
@@ -135,17 +180,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 const place = await response.json();
-                
-                // Məlumatları HTML-ə doldururuq
                 document.getElementById('place-name').textContent = place.name;
-                document.getElementById('place-host').innerHTML = `<b>Host:</b> ${place.user_id}`; // Sadəlik üçün ID
+                document.getElementById('place-host').innerHTML = `<b>Host:</b> ${place.user_id}`;
                 document.getElementById('place-price').innerHTML = `<b>Price:</b> $${place.price_by_night}/night`;
                 document.getElementById('place-description').innerHTML = place.description;
 
-                // Amenities (İmkanlar)
                 const amenitiesList = document.getElementById('place-amenities');
                 amenitiesList.innerHTML = '';
-                // Əgər amenities API-dən gəlirsə (hazırda boş gələ bilər)
                 if (place.amenities) {
                    place.amenities.forEach(amenity => {
                        const li = document.createElement('li');
@@ -154,7 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
                    });
                 }
 
-                // Reviews (Rəylər)
                 const reviewsList = document.getElementById('reviews-list');
                 reviewsList.innerHTML = '';
                 if (place.reviews) {
@@ -168,8 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         reviewsList.appendChild(div);
                     });
                 }
-            } else {
-                alert('Could not load place details.');
             }
         } catch (error) {
             console.error('Error fetching details:', error);
