@@ -140,3 +140,14 @@ footer {
     text-align: right;
 }
 .add-review-container { margin-top: 20px; width: 200px; }
+/* Filter Section Style */
+.filter-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.filter-section select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
