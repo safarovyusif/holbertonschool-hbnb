@@ -151,3 +151,26 @@ footer {
     border-radius: 5px;
     border: 1px solid #ccc;
 }
+/* Ana səhifə başlığı */
+.section-title {
+    text-align: center;
+    font-size: 30px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+/* Filtrin mərkəzdə durması üçün */
+.filter-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.filter-section select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
